@@ -1,0 +1,9 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: operatorhub-io
+spec:
+  displayName: OperatorHub.io
+  image: 'quay.io/operatorhubio/catalog:latest'
+  publisher: 'OperatorHub.io'
+  sourceType: grpc
