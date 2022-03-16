@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: sysdig-oss
+spec:
+  selector:
+    matchLabels:
+      app: sysdig-oss
+  template:
+    metadata:
+      labels:
+        app: sysdig-oss
+    spec:
+      containers:
+      - image: docker.io/sysdig/sysdig:latest
+        command:
+        - /bin/bash
+        - /sysdig-oss/init.sh
+        imagePullPolicy: Always
+        name: sysdig-oss
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: host
+          mountPath: /host
+          mountPropagation: Bidirectional
+        - name: init
+          mountPath: /sysdig-oss
+      serviceAccountName: sysdig-oss
+      volumes:
+      - name: init
+        configMap:
+          name: sysdig-init
+      - name: host
+        hostPath:
+          path: /
+      tolerations:
+      - operator: Exists
